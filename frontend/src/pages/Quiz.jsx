@@ -167,7 +167,7 @@ const Quiz = () => {
     };
 
     if (questions.length === 0) return <p>Loading questions...</p>;
-    if (disqualified) return <p>You have been disqualified due to tab switching.</p>;
+    if (disqualified) return <p className="text-white">You have been disqualified due to tab switching.</p>;
 
     return (
         <div className="text-white bg-black w-full h-screen p-6 flex gap-6">

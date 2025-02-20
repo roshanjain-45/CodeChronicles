@@ -1,4 +1,4 @@
-const API_BASE = "https://codechronicles-329u.onrender.com";
+const API_BASE = "https://codechronicles-329u.onrender.com/api";
 
 export const fetchQuestions = async () => {
     const response = await fetch(`${API_BASE}/quiz/questions`);
