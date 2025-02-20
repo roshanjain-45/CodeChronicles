@@ -1,3 +1,3 @@
-const API_BASE_URL = "http://localhost:5000"; // Backend URL
+const API_BASE_URL = "https://codechronicles-329u.onrender.com"; // Backend URL
 
 export default API_BASE_URL;
