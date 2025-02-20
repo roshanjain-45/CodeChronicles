@@ -8,7 +8,7 @@ const Quiz = () => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [timeLeft, setTimeLeft] = useState(180*60);
+    const [timeLeft, setTimeLeft] = useState(180 * 60);
     const [disqualified, setDisqualified] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
@@ -170,75 +170,146 @@ const Quiz = () => {
     if (disqualified) return <p className="text-white">You have been disqualified due to tab switching.</p>;
 
     return (
-        <div className="text-white bg-black w-full h-screen p-6 flex gap-6">
-        {/* Submission Code Editor */}
-        <div className="w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">✍️ Submit Your Answer</h2>
-          <h3 className="text-lg font-semibold">Question {currentQuestionIndex + 1} of {questions.length}</h3>
-          <h3 className="text-xl mt-2">{questions[currentQuestionIndex].title}</h3>
-          <p className="mt-1 text-gray-300">{questions[currentQuestionIndex].description}</p>
-          <h3 className="mt-3 text-red-400">⏳ Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</h3>
-      
-          {/* Code Editor for Answer Submission */}
-          <div className="mt-4">
-            <CodeEditor 
-              value={answers[questions[currentQuestionIndex]._id] || ""} 
-              onChange={handleCodeChange} 
-            />
-          </div>
-      
-          {/* Navigation Buttons */}
-          <div className="mt-4 flex justify-between">
-            <button onClick={handlePrev} disabled={currentQuestionIndex === 0} className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">
-              ⬅️ Previous
-            </button>
-            <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
-              Next ➡️
-            </button>
-            {currentQuestionIndex === questions.length - 1 && (
-              <button onClick={() => handleSubmit(false)} className="px-4 py-2 bg-green-600 rounded hover:bg-green-500">
-                ✅ Submit
-              </button>
-            )}
-          </div>
+        <div className="text-white bg-black w-full min-h-screen p-6 flex flex-col md:flex-row gap-6">
+            {/* Submission Code Editor */}
+            <div className="w-full md:w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold mb-4">✍️ Submit Your Answer</h2>
+                <h3 className="text-lg font-semibold">Question {currentQuestionIndex + 1} of {questions.length}</h3>
+                <h3 className="text-xl mt-2">{questions[currentQuestionIndex].title}</h3>
+                <p className="mt-1 text-gray-300">{questions[currentQuestionIndex].description}</p>
+                <h3 className="mt-3 text-red-400">⏳ Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</h3>
+
+                {/* Code Editor for Answer Submission */}
+                <div className="mt-4">
+                    <CodeEditor
+                        value={answers[questions[currentQuestionIndex]._id] || ""}
+                        onChange={handleCodeChange}
+                    />
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="mt-4 flex justify-between">
+                    <button onClick={handlePrev} disabled={currentQuestionIndex === 0} className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">
+                        ⬅️ Previous
+                    </button>
+                    <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
+                        Next ➡️
+                    </button>
+                    {currentQuestionIndex === questions.length - 1 && (
+                        <button onClick={() => handleSubmit(false)} className="px-4 py-2 bg-green-600 rounded hover:bg-green-500">
+                            ✅ Submit
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Run & Test Code Editor */}
+            <div className="w-full md:w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold mb-4">🛠️ Run & Test Code</h2>
+
+                {/* Language Selection Dropdown */}
+                <select
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    value={selectedLanguage}
+                    className="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none"
+                >
+                    <option value="54">C++</option>
+                    <option value="50">C</option>
+                    <option value="62">Java</option>
+                    <option value="71">Python</option>
+                    <option value="63">JavaScript</option>
+                </select>
+
+                {/* Code Editor for Running & Testing Code */}
+                <div className="mt-4">
+                    <CodeEditor value={testCode} onChange={setTestCode} language="javascript" />
+                </div>
+
+                {/* Run Code Button */}
+                <button
+                    onClick={handleRunCode}
+                    className="mt-4 px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-500"
+                >
+                    🚀 Run Code
+                </button>
+
+                {/* Output Display */}
+                <h3 className="mt-4 text-lg font-semibold">🖥️ Output:</h3>
+                <pre className="bg-gray-800 p-4 rounded text-green-400 overflow-x-auto break-words">
+                    {output}
+                </pre>
+            </div>
         </div>
-      
-        {/* Run & Test Code Editor */}
-        <div className="w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">🛠️ Run & Test Code</h2>
-          
-          {/* Language Selection Dropdown */}
-          <select 
-            onChange={(e) => setSelectedLanguage(e.target.value)} 
-            value={selectedLanguage} 
-            className="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none"
-          >
-            <option value="54">C++</option>
-            <option value="50">C</option>
-            <option value="62">Java</option>
-            <option value="71">Python</option>
-            <option value="63">JavaScript</option>
-          </select>
-      
-          {/* Code Editor for Running & Testing Code */}
-          <div className="mt-4">
-            <CodeEditor value={testCode} onChange={setTestCode} language="javascript" />
-          </div>
-      
-          {/* Run Code Button */}
-          <button 
-            onClick={handleRunCode} 
-            className="mt-4 px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-500"
-          >
-            🚀 Run Code
-          </button>
-      
-          {/* Output Display */}
-          <h3 className="mt-4 text-lg font-semibold">🖥️ Output:</h3>
-          <pre className="bg-gray-800 p-4 rounded text-green-400">{output}</pre>
-        </div>
-      </div>
-      
+
+        //     <div className="text-white bg-black w-full h-screen p-6 flex gap-6">
+        //     {/* Submission Code Editor */}
+        //     <div className="w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
+        //       <h2 className="text-2xl font-bold mb-4">✍️ Submit Your Answer</h2>
+        //       <h3 className="text-lg font-semibold">Question {currentQuestionIndex + 1} of {questions.length}</h3>
+        //       <h3 className="text-xl mt-2">{questions[currentQuestionIndex].title}</h3>
+        //       <p className="mt-1 text-gray-300">{questions[currentQuestionIndex].description}</p>
+        //       <h3 className="mt-3 text-red-400">⏳ Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</h3>
+
+        //       {/* Code Editor for Answer Submission */}
+        //       <div className="mt-4">
+        //         <CodeEditor 
+        //           value={answers[questions[currentQuestionIndex]._id] || ""} 
+        //           onChange={handleCodeChange} 
+        //         />
+        //       </div>
+
+        //       {/* Navigation Buttons */}
+        //       <div className="mt-4 flex justify-between">
+        //         <button onClick={handlePrev} disabled={currentQuestionIndex === 0} className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">
+        //           ⬅️ Previous
+        //         </button>
+        //         <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
+        //           Next ➡️
+        //         </button>
+        //         {currentQuestionIndex === questions.length - 1 && (
+        //           <button onClick={() => handleSubmit(false)} className="px-4 py-2 bg-green-600 rounded hover:bg-green-500">
+        //             ✅ Submit
+        //           </button>
+        //         )}
+        //       </div>
+        //     </div>
+
+        //     {/* Run & Test Code Editor */}
+        //     <div className="w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
+        //       <h2 className="text-2xl font-bold mb-4">🛠️ Run & Test Code</h2>
+
+        //       {/* Language Selection Dropdown */}
+        //       <select 
+        //         onChange={(e) => setSelectedLanguage(e.target.value)} 
+        //         value={selectedLanguage} 
+        //         className="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none"
+        //       >
+        //         <option value="54">C++</option>
+        //         <option value="50">C</option>
+        //         <option value="62">Java</option>
+        //         <option value="71">Python</option>
+        //         <option value="63">JavaScript</option>
+        //       </select>
+
+        //       {/* Code Editor for Running & Testing Code */}
+        //       <div className="mt-4">
+        //         <CodeEditor value={testCode} onChange={setTestCode} language="javascript" />
+        //       </div>
+
+        //       {/* Run Code Button */}
+        //       <button 
+        //         onClick={handleRunCode} 
+        //         className="mt-4 px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-500"
+        //       >
+        //         🚀 Run Code
+        //       </button>
+
+        //       {/* Output Display */}
+        //       <h3 className="mt-4 text-lg font-semibold">🖥️ Output:</h3>
+        //       <pre className="bg-gray-800 p-4 rounded text-green-400">{output}</pre>
+        //     </div>
+        //   </div>
+
     );
 };
 
