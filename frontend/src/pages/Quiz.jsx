@@ -8,7 +8,7 @@ const Quiz = () => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [timeLeft, setTimeLeft] = useState(100 * 60); // 90 minutes
+    const [timeLeft, setTimeLeft] = useState(50 * 60); // 50 minutes
     const [disqualified, setDisqualified] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
