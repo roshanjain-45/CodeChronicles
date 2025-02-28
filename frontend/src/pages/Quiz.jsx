@@ -51,8 +51,40 @@ const Quiz = () => {
             });
         }, 1000);
 
+        // 🚨 Detect tab switch for disqualification
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                alert("🚨 Disqualified! You switched tabs.");
+                setDisqualified(true);
+                clearInterval(timerRef.current);
+            }
+        };
+
+        // // 🚨 Detect application switch (blur event)
+        // const handleBlur = () => {
+        //     alert("🚨 Disqualified! You switched applications.");
+        //     setDisqualified(true);
+        //     clearInterval(timerRef.current);
+        // };
+
+        // 🚨 Detect inspect element (F12, Ctrl+Shift+I)
+        const handleKeyDown = (e) => {
+            if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+                alert("🚨 Cheating detected! You have been disqualified.");
+                setDisqualified(true);
+                clearInterval(timerRef.current);
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        // window.addEventListener("blur", handleBlur);
+        document.addEventListener("keydown", handleKeyDown);
+
         return () => {
             clearInterval(timerRef.current);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            // window.removeEventListener("blur", handleBlur);
+            document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
@@ -99,6 +131,7 @@ const Quiz = () => {
     };
 
     if (questions.length === 0) return <p>Loading questions...</p>;
+    if (disqualified) return <p className="text-white">🚨 You have been disqualified due to tab/application switch or inspection.</p>;
 
     return (
         <div className="text-white bg-black w-full min-h-screen p-6 flex flex-col md:flex-row gap-6">
@@ -136,7 +169,6 @@ const Quiz = () => {
                         </pre>
                     </div>
                 )}
-
                 {/* Code Editor for Answer Submission */}
                 <div className="mt-4">
                     <CodeEditor value={answers[questions[currentQuestionIndex]._id] || ""} onChange={(code) => {
@@ -144,34 +176,27 @@ const Quiz = () => {
                         setAnswers((prev) => ({ ...prev, [questions[currentQuestionIndex]._id]: code || "N/A" }));
                     }} />
                 </div>
-
-                {/* Navigation Buttons */}
-                <div className="mt-4 flex justify-between items-center w-full">
+                {/* Next, Previous, and Submit Buttons */}
+                <div className="mt-4 flex justify-between">
                     <button onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
                         disabled={currentQuestionIndex === 0}
                         className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
                     >
                         ⬅️ Previous
                     </button>
-                    <span className="text-gray-400">Question {currentQuestionIndex + 1} / {questions.length}</span>
                     <button onClick={() => setCurrentQuestionIndex(Math.min(questions.length - 1, currentQuestionIndex + 1))}
                         disabled={currentQuestionIndex === questions.length - 1}
                         className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
                     >
                         Next ➡️
                     </button>
-                </div>
-
-                {currentQuestionIndex === questions.length - 1 && (
-                    <div className="mt-4 text-center">
+                    {currentQuestionIndex === questions.length - 1 && (
                         <button onClick={handleSubmit} className="px-6 py-3 bg-green-600 rounded hover:bg-green-500 text-lg">
                             ✅ Submit Answers
                         </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-
-            {/* Run & Test Code Editor */}
             <div className="w-full md:w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">🛠️ Run & Test Code</h2>
                 <select onChange={(e) => setSelectedLanguage(e.target.value)} value={selectedLanguage} className="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none">
