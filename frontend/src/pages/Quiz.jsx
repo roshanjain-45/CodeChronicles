@@ -130,7 +130,7 @@ const Quiz = () => {
         }
     };
 
-    if (questions.length === 0) return <p>Loading questions...</p>;
+    if (questions.length === 0) return <p className="text-white">Loading questions...</p>;
     if (disqualified) return <p className="text-white">🚨 You have been disqualified due to tab/application switch or inspection.</p>;
 
     return (
@@ -184,17 +184,18 @@ const Quiz = () => {
                     >
                         ⬅️ Previous
                     </button>
+                    {currentQuestionIndex === questions.length - 1 && (
+                        <button onClick={handleSubmit} className="px-6 py-3 bg-green-600 rounded hover:bg-green-500 text-lg">
+                            ✅ Submit Answers
+                        </button>
+                    )}
                     <button onClick={() => setCurrentQuestionIndex(Math.min(questions.length - 1, currentQuestionIndex + 1))}
                         disabled={currentQuestionIndex === questions.length - 1}
                         className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
                     >
                         Next ➡️
                     </button>
-                    {currentQuestionIndex === questions.length - 1 && (
-                        <button onClick={handleSubmit} className="px-6 py-3 bg-green-600 rounded hover:bg-green-500 text-lg">
-                            ✅ Submit Answers
-                        </button>
-                    )}
+                    
                 </div>
             </div>
             <div className="w-full md:w-1/2 p-6 bg-gray-900 rounded-lg shadow-lg">
