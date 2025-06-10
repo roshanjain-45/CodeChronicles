@@ -99,8 +99,8 @@ Follow these steps to get CodeQuiz up and running on your local machine:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/yourusername/codequiz-app.git](https://github.com/yourusername/codequiz-app.git)
-    cd codequiz-app
+    git clone [https://github.com/roshanjain-45/CodeChronicles.git](https://github.com/roshanjain-45/CodeChronicles.git)
+    cd frontend
     ```
 2.  **Install dependencies:**
     ```bash
