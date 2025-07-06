@@ -137,7 +137,6 @@ Constantly working to improve Code Chronicles. Here are some exciting features p
     * **Difficulty Tags:** Tag questions as Easy, Medium, or Hard for better filtering and organization.
     * **Multilingual UI:** Expand language support to include Hindi, English, and more for a wider global reach.
 
-* ### **Visuals**
-    * **Screenshots:** Add screenshots of the quiz panel, code runner, disqualification alerts, and other key features to the README.
+
 
 ---
